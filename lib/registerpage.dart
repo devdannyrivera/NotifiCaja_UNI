@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:notificaja_uni/classes/controladores.dart';
+import 'loginpage.dart';
+import 'pageview.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -14,7 +16,7 @@ class _RegisterPageState extends State<RegisterPage> {
 final nombres = TextEditingController();final apellidos = TextEditingController();final carnet = TextEditingController();
 String numcarrera;final correo = TextEditingController();final clave = TextEditingController();final repetirClave = TextEditingController();
 Future registrar(String prnom, String sgnom, String prapell, String sgapell, String carnet, String carrera, String correo, String clave, BuildContext context) async {
-  var url = 'https://exasperate-load.000webhostapp.com/registro.php';
+  var url = 'https://notificaja.000webhostapp.com/flutterApp/registro.php';
   http.Response response = await http.post(url, body: {
     "pr_nombre": prnom,
     "sg_nombre": sgnom,
@@ -26,9 +28,11 @@ Future registrar(String prnom, String sgnom, String prapell, String sgapell, Str
     "pw": clave
   });
     var data = jsonDecode(response.body);
-    print(data);
+    print(data.toString());
     if(data['success'] == true){
-      
+      LoginPage().createState().saveValue(true, data['id_estudiante'], prnom, sgnom, prapell, sgapell, carnet, carrera, correo);
+      final datos = Datos(id: data['id_estudiante'], pnombre: prnom, snombre: sgnom, papellido: prapell, sapellido: sgapell, carnet: carnet, carrera: data['carrera'],email: correo);
+      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => Pageview( datos : datos,)), (Route<dynamic> route) => false);
     } else{
       Controladores().mostrarDialogo(context, 'Este perfil ya existe', 'Solicitud de Registro', 'Cerrar');  
     }

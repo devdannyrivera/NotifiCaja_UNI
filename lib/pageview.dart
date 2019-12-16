@@ -62,7 +62,7 @@ class _PageviewState extends State<Pageview> {
      bool _sizebool = true;
      int counter = 1;
   Future agregar(String idestudiante) async {
-  var url = 'https://exasperate-load.000webhostapp.com/cola.php';
+  var url = 'https://notificaja.000webhostapp.com/flutterApp/cola.php';
   http.Response response = await http.post(url, body: {
     "id_estudiante": idestudiante,
   });
@@ -77,7 +77,7 @@ class _PageviewState extends State<Pageview> {
     }
   }
  Future consultar(String idestudiante) async {
-  var url = 'https://exasperate-load.000webhostapp.com/valores.php';
+  var url = 'https://notificaja.000webhostapp.com/flutterApp/valores.php';
   try{
   http.Response response = await http.post(url, body: {
     "id_estudiante": idestudiante,
@@ -309,6 +309,7 @@ class _PageviewState extends State<Pageview> {
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     flutterLocalNotificationsPlugin.initialize(initializationSettings, 
         onSelectNotification: onSelectNotification);
+        _scheduleNotification();
   }
   void dispose(){
     timer?.cancel();
@@ -452,7 +453,26 @@ class _PageviewState extends State<Pageview> {
     payload: 'Es urgente que te dirijas a caja o perderas tu turno',
   );
   }
-  Future onSelectNotification(String payload) async {
+  Future _scheduleNotification() async {
+    var scheduledNotificationDateTime =
+         new DateTime.now().add(new Duration(seconds: 30));
+    var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
+        'your other channel id',
+        'your other channel name',
+        'your other channel description',
+        color: const Color.fromARGB(255, 255, 0, 0));
+    var iOSPlatformChannelSpecifics =
+        new IOSNotificationDetails();
+    var platformChannelSpecifics = new NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.schedule(
+        3,
+        'scheduled title',
+        'scheduled body',
+        scheduledNotificationDateTime,
+        platformChannelSpecifics);
+  }
+    Future onSelectNotification(String payload) async {
     showDialog(
       context: context,
       builder: (_) {

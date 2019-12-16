@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
     ]);
   }
 
-_saveValue(bool token, int idestudiante, String prnom, sgnom, prapell, sgapell, carnet, carrera, email) async{
+saveValue(bool token, int idestudiante, String prnom, sgnom, prapell, sgapell, carnet, carrera, email) async{
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setBool('token', token);
         await prefs.setInt('id_estudiante', idestudiante);
@@ -95,7 +95,7 @@ _saveValue(bool token, int idestudiante, String prnom, sgnom, prapell, sgapell, 
 }
 
 Future getlogin(String carnet, String password, BuildContext context) async {
-  var url = 'https://exasperate-load.000webhostapp.com/log-in.php';
+  var url = 'https://notificaja.000webhostapp.com/flutterApp/log-in.php';
   http.Response response = await http.post(url, body: {
     "carnet": carnet,
     "pwd": password
@@ -103,7 +103,7 @@ Future getlogin(String carnet, String password, BuildContext context) async {
     var data = jsonDecode(response.body);
     print(data.toString());
     if(data['password'] == true){
-      _saveValue(true, data['id_estudiante'], data['pr_nom'],data['sg_nom'],data['pr_apell'], data['sg_apell'], data['carnet'], data['carrera'], data['email']);
+      saveValue(true, data['id_estudiante'], data['pr_nom'],data['sg_nom'],data['pr_apell'], data['sg_apell'], data['carnet'], data['carrera'], data['email']);
       final datos = Datos(id: data['id_estudiante'], pnombre: data['pr_nom'], snombre: data['sg_nom'], papellido: data['pr_apell'], sapellido: data['sg_apell'], carnet: data['carnet'], carrera: data['carrera'],email: data['email']);
       Navigator.pushReplacement(
                 context,

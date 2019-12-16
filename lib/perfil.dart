@@ -77,9 +77,7 @@ class PerfilPage extends StatelessWidget {
           onPressed: (
           ) {
             _removeValue();
-           Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()));
+            Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()), (Route<dynamic> route) => false);
           },
           child: Text("Cerrar sesion", style: TextStyle(color: Colors.white, fontSize: 18),),
           shape: StadiumBorder(),
